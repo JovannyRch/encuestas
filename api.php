@@ -40,7 +40,7 @@ switch ($metodo) {
                         $preguntas_reporte[] = array('pregunta' => $pregunta, 'promedio' => $promedio);
                     }
 
-                    $comentarios = $db->array("SELECT * from comentarios natural join alumnos");
+                    $comentarios = $db->array("SELECT comentarios.*, alumnos.* from comentarios natural join encuestas NATURAL JOIN alumnos");
                     $reporte = array(
                         'totalAlumnos' => intval($totalAlumnos),
                         'totalEncuestas' => intval($totalEncuestas),

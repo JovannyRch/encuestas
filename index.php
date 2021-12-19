@@ -45,6 +45,10 @@ $id_usuario = $_SESSION['id_usuario'];
         </b>
     </div>
     <div v-if="!loading && isAvailable">
+        <br>
+        <a href="logout.php" type="button" name="action">
+            Cerrar sesión
+        </a>
         <h3 class="uppercase">Escuela superior de computo</h3>
         <p class="text-center">
             Estimada(o) estudiante, en la ESCOM queremos saber tu opinion sobre las clases que has tenido hasta el
@@ -143,7 +147,7 @@ $id_usuario = $_SESSION['id_usuario'];
             },
             guardar: async function () {
                 if (this.respuestas.length !== this.preguntas.length * this.unidades.length) {
-                    alert("Conteste todas la respuestas");
+                    alert("Conteste todas las preguntas");
                     return;
                 }
                 const idAlumno = this.idAlumno;

@@ -12,6 +12,11 @@ create table semestres(
     nombre varchar(100)
 );
 
+create table grupos(
+    id_grupo int primary key not null auto_increment,
+    nombre varchar(100)
+);
+
 create table unidades_aprendizaje(
     id_unidad_aprendizaje int primary key not null auto_increment,
     nombre varchar(100),
@@ -38,7 +43,9 @@ create table alumnos(
     id_semestre int,
     foreign key(id_semestre) references semestres(id_semestre) on delete cascade,
     id_programa_academico int, 
-    foreign key(id_programa_academico) references programas_academicos(id_programa_academico) on delete cascade
+    foreign key(id_programa_academico) references programas_academicos(id_programa_academico) on delete cascade,
+    id_grupo int,
+    foreign key(id_grupo) references grupos(id_grupo) on delete cascade
 );
 
 
@@ -78,6 +85,7 @@ insert into programas_academicos(nombre) values('ING. EN SIS. COMPUTACIONALES');
 
 
 insert into semestres(nombre) values('1er Semestre'), ('2do Semestre'), ('3er Semestre'), ('4to Semestre');
+insert into grupos(nombre) values('Grupo 1'), ('Grupo 2'), ('Grupo 3'), ('Grupo 4');
 
 insert into unidades_aprendizaje
 (nombre,id_semestre,id_programa_academico) values('ANALISIS DE ALGORITMOS', 1,1);
@@ -95,10 +103,16 @@ insert into unidades_aprendizaje
 
 
 insert into usuarios(correo, contrasenia,tipo_usuario) values('alumno','123', 'ALUMNO');
+insert into usuarios(correo, contrasenia,tipo_usuario) values('alumno2','123', 'ALUMNO');
 insert into usuarios(correo, contrasenia,tipo_usuario) values('admin','123', 'ADMIN');
 
-insert into alumnos(nombre,apellido_materno,apellido_paterno, id_semestre,id_programa_academico, id_usuario) 
-values('JOSE ALFONSO', 'GUTIERREZ', 'MARTINEZ', 1,1,1);
+insert into alumnos(nombre,apellido_materno,apellido_paterno, id_semestre,id_programa_academico, id_usuario, id_grupo) 
+values('JOSE ALFONSO', 'GUTIERREZ', 'MARTINEZ', 1,1,1, 1);
+
+
+insert into alumnos(nombre,apellido_materno,apellido_paterno, id_semestre,id_programa_academico, id_usuario, id_grupo) 
+values('HUGO EDGAR', 'MEDRANO', 'MEDRANO', 1,1,2, 2);
+
 
 insert into preguntas(pregunta) values('¿Cómo consideras que ha sido la impartición de los temas en tu clase?');
 insert into preguntas(pregunta) values('¿Pregunta 2?');
