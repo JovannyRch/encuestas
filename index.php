@@ -95,7 +95,7 @@ $id_usuario = $_SESSION['id_usuario'];
             <textarea v-model="comentario" class="materialize-textarea"></textarea>
             <label for="textarea1">Comentarios</label>
         </div>
-        <button class="btn" @click="guardar">Guardar</button>
+        <button class="btn" :disabled="isSaving" @click="guardar">Guardar</button>
     </div>
 </div>
 <script>
@@ -112,6 +112,7 @@ $id_usuario = $_SESSION['id_usuario'];
             isAvailable: null,
             idAlumno: -1,
             datosUsuario: null,
+            isSaving: false,
         },
         created: function () {
             this.getData();
@@ -146,17 +147,22 @@ $id_usuario = $_SESSION['id_usuario'];
                 this.respuestas.push(item);
             },
             guardar: async function () {
+
                 if (this.respuestas.length !== this.preguntas.length * this.unidades.length) {
                     alert("Conteste todas las preguntas");
                     return;
                 }
+                this.isSaving = true;
                 const idAlumno = this.idAlumno;
                 const data = {
                     idAlumno,
                     comentario: this.comentario,
                     respuestas: this.respuestas,
                 }
+
                 await axios.post('api.php/encuesta', data);
+                this.isSaving = false;
+
                 this.isAvailable = false;
                 location.reload();
             },

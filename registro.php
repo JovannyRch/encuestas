@@ -4,6 +4,20 @@ session_start();
 
 require 'Db.php';
 
+
+function validarBoleta($login){
+
+    if(strlen("$login") != 10) return false;
+
+    $digitos = "1234567890";
+    for($i = 0; $i < strlen($login); $i++){
+        if(!str_contains($digitos, $login[$i])){
+            return false;
+        }
+    }
+    return true;
+}
+
 if (isset($_SESSION['login'])) {
     if ($_SESSION['tipo_usuario'] == "ALUMNO") {
         header("Location: index.php");
@@ -52,6 +66,8 @@ if ($metodo == "POST") {
         $id_programa_academico = $_POST['id_programa_academico'];
         $id_semestre = $_POST['id_semestre'];
 
+        
+
         $data = array(
             'login' => $login,
             'password' => $password,
@@ -65,7 +81,9 @@ if ($metodo == "POST") {
         );
 
 
-        if ($password != $password2) {
+        if(!validarBoleta($login)){
+            $mensaje = array('type' => 'alert', 'msg' => 'La boleta debe de ser de 10 dígitos');
+        }else if ($password != $password2) {
             $mensaje = array('type' => 'alert', 'msg' => 'Las contraseñas no coiciden');
         } else {
 
