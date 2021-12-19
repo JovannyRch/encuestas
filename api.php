@@ -36,11 +36,11 @@ switch ($metodo) {
                 $comentario = $datos['comentario'];
                 $respuestas = $datos['respuestas'];
 
-                
+
                 if (isset($comentario)) {
                     $db->insert("INSERT into comentarios(comentario, id_alumno) values('$comentario','$idAlumnno')");
                 }
-           
+
                 foreach ($respuestas as $respuesta) {
                     $idPregunta = $respuesta['idPregunta'];
                     $idUnidad = $respuesta['idUnidad'];
@@ -50,6 +50,12 @@ switch ($metodo) {
                 }
                 responder(array("res" => 'ok'));
                 break;
+            case 'disponibilidad_encuesta': {
+                    $idAlumnno = $datos['idAlumno'];
+                    $respuestas = $db->array("SELECT * from respuestas where id_alumno = $idAlumnno");
+                    responder(array("res" => sizeof($respuestas) == 0));
+                    break;
+                }
         }
         break;
     case 'PUT':
