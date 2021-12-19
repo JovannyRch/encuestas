@@ -60,6 +60,35 @@
                     <canvas id="chart-preguntas"></canvas>
                 </div>
             </div>
+
+            <br><br>
+            <h4>Reporte por grupos</h4>
+            <div>
+                <ul class="collection">
+                    <li class="collection-item" v-for="grupo in grupos">
+                        <h5 class="text-center"> {{grupo.nombre}}</h5>
+
+                        <table>
+                            <thead>
+                                <th>Pregunta</th>
+                                <th>Promedio</th>
+                            </thead>
+                            <tbody>
+                                <tr v-for="pregunta in grupo.preguntas">
+                                    <td>
+                                        {{pregunta.pregunta.pregunta}}
+                                    </td>
+                                    <td>
+                                        {{pregunta.promedio}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <br><br>
+                    </li>
+                </ul>
+            </div>
         </div>
 
     </div>
@@ -75,7 +104,7 @@
             preguntas: [],
             unidades: [],
             chart: null,
-            
+            grupos: [],
         },
         created: function() {
             this.getData();
@@ -100,11 +129,12 @@
                 });
 
                 this.preguntas = data.preguntas;
+                this.grupos = data.grupos;
                 this.generarGrafica();
             },
             generarGrafica: function() {
 
-                if(this.chart != null){
+                if (this.chart != null) {
                     this.chart.destroy();
                 }
                 const data = {

@@ -110,11 +110,27 @@ switch ($metodo) {
                     $preguntas_reporte = array();
                     $preguntas = $db->array("SELECT * from preguntas");
                     foreach ($preguntas as $pregunta) {
-                        $idPregunta = $pregunta['id_pregunta'];
-                        $promedio = floatval($db->row("SELECT avg(puntaje) promedio from preguntas natural join respuestas where id_pregunta = $idPregunta and id_unidad_aprendizaje = $idUnidad")['promedio']);
+                        $id_pregunta = $pregunta['id_pregunta'];
+                        $promedio = floatval($db->row("SELECT avg(puntaje) promedio from preguntas natural join respuestas where id_pregunta = $id_pregunta and id_unidad_aprendizaje = $idUnidad")['promedio']);
                         $preguntas_reporte[] = array('pregunta' => $pregunta, 'promedio' => $promedio);
                     }
-                    responder(array('preguntas' => $preguntas_reporte));
+
+                    $grupos = $db->array("SELECT * from grupos");
+
+                    $reporte_grupos = array();
+                    foreach ($grupos as $grupo) {
+                        $id_grupo = $grupo['id_grupo'];
+                        $preguntas_reporte = array();
+                        foreach ($preguntas as $pregunta) {
+                            $id_pregunta = $pregunta['id_pregunta'];
+                            $promedio = floatval($db->row("SELECT avg(puntaje) promedio from preguntas natural join respuestas where id_pregunta = $id_pregunta and id_encuesta in (SELECT id_alumno from alumnos where id_grupo = $id_grupo)")['promedio']);
+                            $preguntas_reporte[] = array('pregunta' => $pregunta, 'promedio' => $promedio);
+                        }
+                        $grupo['preguntas'] = $preguntas_reporte;
+                        $reporte_grupos[] = $grupo;
+                    }
+
+                    responder(array('preguntas' => $preguntas_reporte, 'grupos' => $reporte_grupos));
                     break;
                 }
             case 'datos_alumno':{
