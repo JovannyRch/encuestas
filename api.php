@@ -107,12 +107,12 @@ switch ($metodo) {
                 }
             case 'reporte_unidad': {
                     $idUnidad = $datos['idUnidad'];
-                    $preguntas_reporte = array();
+                    $preguntas_reporte1 = array();
                     $preguntas = $db->array("SELECT * from preguntas");
                     foreach ($preguntas as $pregunta) {
                         $id_pregunta = $pregunta['id_pregunta'];
                         $promedio = floatval($db->row("SELECT avg(puntaje) promedio from preguntas natural join respuestas where id_pregunta = $id_pregunta and id_unidad_aprendizaje = $idUnidad")['promedio']);
-                        $preguntas_reporte[] = array('pregunta' => $pregunta, 'promedio' => $promedio);
+                        $preguntas_reporte1[] = array('pregunta' => $pregunta, 'promedio' => $promedio);
                     }
 
                     $grupos = $db->array("SELECT * from grupos");
@@ -130,7 +130,7 @@ switch ($metodo) {
                         $reporte_grupos[] = $grupo;
                     }
 
-                    responder(array('preguntas' => $preguntas_reporte, 'grupos' => $reporte_grupos));
+                    responder(array('preguntas' => $preguntas_reporte1, 'grupos' => $reporte_grupos));
                     break;
                 }
             case 'datos_alumno':{
