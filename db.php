@@ -47,7 +47,12 @@ class Db
 
     function query($sql)
     {
-        return $this->db->query($sql);
+        try{
+            return $this->db->query($sql);
+        }catch (\Throwable $th) {
+            echo $th;
+            return array();
+        }
     }
 
     function insert($sql){

@@ -29,12 +29,31 @@
                 {{unidad.nombre}}
             </td>
 
-            <th v-for="pregunta in preguntas">
-                <input >
-            </th>
+            <td v-for="pregunta in preguntas">
+                <div style="display: flex;">
+                    <div class="star" @click="contestar(pregunta, 1, unidad)">
+                    </div>
+                    <div class="star" @click="contestar(pregunta, 2, unidad)">
+                    </div>
+                    <div class="star" @click="contestar(pregunta, 3, unidad)">
+                    </div>
+                    <div class="star" @click="contestar(pregunta, 4, unidad)">
+                    </div>
+                    <div class="star" @click="contestar(pregunta, 5, unidad)">
+                    </div>
+                    {{obtenerPuntaje(pregunta, unidad)}}
+                </div>
+            </td>
 
         </tr>
     </table>
+ 
+    <br>
+    <div class="input-field col s12">
+        <textarea v-model="comentario" class="materialize-textarea"></textarea>
+        <label for="textarea1">Comentarios</label>
+    </div>
+    <button class="btn" @click="guardar">Guardar</button>
 </div>
 <script>
 
@@ -44,6 +63,8 @@
             unidades: [],
             preguntas: [],
             loading: false,
+            comentario: '',
+            respuestas: [],
         },
         created: function () {
             this.getData();
@@ -62,6 +83,30 @@
             getUnidades: async function () {
                 const { data } = await axios('api.php/unidades');
                 this.unidades = data;
+            },
+            contestar: function (pregunta, puntaje, unidad) {
+                const item = { idPregunta: pregunta.id_pregunta, puntaje, idUnidad: unidad.id_unidad_aprendizaje };
+                this.respuestas = this.respuestas.filter((r) => !(r.idPregunta === item.idPregunta && r.idUnidad === item.idUnidad))
+                this.respuestas.push(item);
+            },
+            guardar: async function () {
+              /*   if (this.respuestas.length !== this.preguntas.length * this.unidades.length) {
+                    return;
+                } */
+                const idAlumno = 1; //TODO
+                const data = {
+                    idAlumno,
+                    comentario: this.comentario,
+                    respuestas: this.respuestas,
+                }
+                await axios.post('api.php/respuesta', data);
+            },
+            obtenerPuntaje: function (pregunta, unidad) {
+                const res = this.respuestas.find((r) => r.idPregunta === pregunta.id_pregunta && r.idUnidad === unidad.id_unidad_aprendizaje);
+                if (!res) {
+                    return "*";
+                }
+                return res.puntaje;
             }
         }
     })

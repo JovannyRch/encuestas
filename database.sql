@@ -58,6 +58,12 @@ create table respuestas(
     puntaje int not null
 );
 
+create table comentarios(
+    id_comentario int primary key not null auto_increment,
+    comentario varchar(255) not null,
+    id_alumno int, 
+    foreign key(id_alumno) references alumnos(id_alumno) on delete cascade
+);
 
 insert into programas_academicos(nombre) values('ING. EN SIS. COMPUTACIONALES');
 
