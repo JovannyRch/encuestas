@@ -26,7 +26,7 @@ $id_usuario = $_SESSION['id_usuario'];
     <div v-if="!isAvailable">
         <br><br><br>
         <b>
-            <h5 class="text-center">{{`${datosUsuario.nombre} ${datosUsuario.apellido_paterno}
+            <h5 class="text-center" v-if="datosUsuario != null">{{`${datosUsuario.nombre} ${datosUsuario.apellido_paterno}
                 ${datosUsuario.apellido_materno}`}}</h5>
             <h3 class="text-center">Gracias por participar.</h3>
             <center>
@@ -99,7 +99,7 @@ $id_usuario = $_SESSION['id_usuario'];
             comentario: '',
             respuestas: [],
             isAvailable: null,
-            idAlumno: 1, //TODO
+            idAlumno: -1, 
             datosUsuario: null,
         },
         created: function () {
@@ -108,7 +108,7 @@ $id_usuario = $_SESSION['id_usuario'];
         methods: {
             getData: async function () {
                 this.loading = true;
-                this.getDatosUsuario();
+                await this.getDatosUsuario();
                 this.isAvailable = await this.checkIsAvailable();
                 if (this.isAvailable) {
                     await this.getPreguntas();
@@ -159,6 +159,7 @@ $id_usuario = $_SESSION['id_usuario'];
             getDatosUsuario: async function () {
                 const { data } = await axios.post('api.php/datos_alumno', { idUsuario: this.idUsuario });
                 this.datosUsuario = data.datos;
+                this.idAlumno = Number(this.datosUsuario.id_alumno);
             }
         }
     })
