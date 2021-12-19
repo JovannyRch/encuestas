@@ -4,6 +4,20 @@ session_start();
 
 require 'Db.php';
 
+function validarBoleta($login)
+{
+
+    if (strlen("$login") != 10) return false;
+
+    $digitos = "1234567890";
+    for ($i = 0; $i < strlen($login); $i++) {
+        if (!str_contains($digitos, $login[$i])) {
+            return false;
+        }
+    }
+    return true;
+}
+
 if (isset($_SESSION['login'])) {
     if ($_SESSION['tipo_usuario'] == "ALUMNO") {
         header("Location: index.php");
@@ -29,25 +43,28 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
         'password' => $password
     );
 
+    if (!validarBoleta($login)) {
+        $mensaje = array('type' => 'alert', 'msg' => 'La boleta debe de ser de 10 dígitos');
+    } else {
 
+        $usuario = $db->row("SELECT * from usuarios where correo = '$login' and contrasenia = '$password'");
 
-    $usuario = $db->row("SELECT * from usuarios where correo = '$login' and contrasenia = '$password'");
+        if (is_array($usuario)) {
 
-    if (is_array($usuario)) {
+            $tipo_usuario = $usuario['tipo_usuario'];
+            $id_usuario = $usuario['id_usuario'];
 
-        $tipo_usuario = $usuario['tipo_usuario'];
-        $id_usuario = $usuario['id_usuario'];
-
-        if ($tipo_usuario == 'ALUMNO') {
-            $_SESSION['id_usuario'] = $id_usuario;
-            $_SESSION['login'] = $login;
-            $_SESSION['tipo_usuario'] = $tipo_usuario;
-            header("Location: index.php");
+            if ($tipo_usuario == 'ALUMNO') {
+                $_SESSION['id_usuario'] = $id_usuario;
+                $_SESSION['login'] = $login;
+                $_SESSION['tipo_usuario'] = $tipo_usuario;
+                header("Location: index.php");
+            } else {
+                $mensaje = array('type' => 'danger', 'msg' => 'Usuario no encontrado');
+            }
         } else {
             $mensaje = array('type' => 'danger', 'msg' => 'Usuario no encontrado');
         }
-    } else {
-        $mensaje = array('type' => 'danger', 'msg' => 'Usuario no encontrado');
     }
 }
 
