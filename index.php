@@ -11,7 +11,7 @@
     <div v-if="!isAvailable">
         <br><br><br>
         <b>
-            <h5 class="text-center">Ya contestaste esta encuesta, gracias por participar.</h5>
+            <h5 class="text-center">Gracias por participar.</h5>
         </b>
     </div>
     <div v-if="!loading && isAvailable">
@@ -119,7 +119,8 @@
                     comentario: this.comentario,
                     respuestas: this.respuestas,
                 }
-                await axios.post('api.php/respuesta', data);
+                await axios.post('api.php/encuesta', data);
+                this.isAvailable = false;
             },
             obtenerPuntaje: function (pregunta, unidad) {
                 const res = this.respuestas.find((r) => r.idPregunta === pregunta.id_pregunta && r.idUnidad === unidad.id_unidad_aprendizaje);

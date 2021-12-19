@@ -47,6 +47,13 @@ create table preguntas(
     pregunta varchar(255)
 );
 
+create table encuestas(
+    id_encuesta int primary key not null auto_increment,
+    id_alumno int, 
+    foreign key(id_alumno) references alumnos(id_alumno) on delete cascade,
+    fecha timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
 create table respuestas(
     id_respuesta int primary key not null auto_increment,
     id_pregunta int,
@@ -55,14 +62,16 @@ create table respuestas(
     foreign key(id_alumno) references alumnos(id_alumno) on delete cascade,
     id_unidad_aprendizaje int, 
     foreign key(id_unidad_aprendizaje) references unidades_aprendizaje(id_unidad_aprendizaje) on delete cascade,
+    id_encuesta int, 
+    foreign key(id_encuesta) references encuestas(id_encuesta) on delete cascade,
     puntaje int not null
 );
 
 create table comentarios(
     id_comentario int primary key not null auto_increment,
     comentario varchar(255) not null,
-    id_alumno int, 
-    foreign key(id_alumno) references alumnos(id_alumno) on delete cascade
+    id_encuesta int, 
+    foreign key(id_encuesta) references encuestas(id_encuesta) on delete cascade
 );
 
 insert into programas_academicos(nombre) values('ING. EN SIS. COMPUTACIONALES');
