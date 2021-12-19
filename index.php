@@ -18,7 +18,7 @@ $id_usuario = $_SESSION['id_usuario'];
 
 
 
-<div id="app">
+<div id="app" class="container">
 
     <div class="progress" v-if="loading">
         <div class="determinate" style="width: 70%"></div>
@@ -26,7 +26,8 @@ $id_usuario = $_SESSION['id_usuario'];
     <div v-if="!isAvailable">
         <br><br><br>
         <b>
-            <h5 class="text-center" v-if="datosUsuario != null">{{`${datosUsuario.nombre} ${datosUsuario.apellido_paterno}
+            <h5 class="text-center" v-if="datosUsuario != null">{{`${datosUsuario.nombre}
+                ${datosUsuario.apellido_paterno}
                 ${datosUsuario.apellido_materno}`}}</h5>
             <h3 class="text-center">Gracias por participar.</h3>
             <center>
@@ -34,7 +35,13 @@ $id_usuario = $_SESSION['id_usuario'];
                     Descargar comprobante
                 </a>
             </center>
-
+            <br>
+            <br>
+            <center>
+                <a href="logout.php" type="button" name="action">
+                    Cerrar sesión
+                </a>
+            </center>
         </b>
     </div>
     <div v-if="!loading && isAvailable">
@@ -99,7 +106,7 @@ $id_usuario = $_SESSION['id_usuario'];
             comentario: '',
             respuestas: [],
             isAvailable: null,
-            idAlumno: -1, 
+            idAlumno: -1,
             datosUsuario: null,
         },
         created: function () {

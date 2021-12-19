@@ -38,11 +38,11 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
         $tipo_usuario = $usuario['tipo_usuario'];
         $id_usuario = $usuario['id_usuario'];
 
-        if ($tipo_usuario == 'ALUMNO') {
+        if ($tipo_usuario == 'ADMIN') {
             $_SESSION['id_usuario'] = $id_usuario;
             $_SESSION['login'] = $login;
             $_SESSION['tipo_usuario'] = $tipo_usuario;
-            header("Location: index.php");
+            header("Location: administracion.php");
         } else {
             $mensaje = array('type' => 'danger', 'msg' => 'Usuario no encontrado');
         }
@@ -56,13 +56,13 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
 
 <?php include('header.php'); ?>
 <div style="min-height: 100vh; width: 100vw;" class="container">
-    <h3>Inicio de sesión</h3>
+    <h3>Inicio de sesión ADMIN</h3>
     <div class="row">
-        <form class="col s6" action="login.php" method="POST">
+        <form class="col s6" action="admin_login.php" method="POST">
             <div class="row">
                 <div class="input-field col s12">
-                    <input placeholder="Ingresa tu boleta" value="<?= $data['login'] ?>" id="boleta" name="login" type="text" class="validate">
-                    <label for="boleta">Boleta</label>
+                    <input placeholder="Ingresa nombre de usuario" value="<?= $data['login'] ?>" id="login" name="login" type="text" class="validate">
+                    <label for="boleta">Nombre de usuario</label>
                 </div>
                 <div class="input-field col s12">
                     <input id="password" value="<?= $data['password'] ?>" placeholder="Ingresa tu contraseña" name="password" type="password" class="validate">
@@ -76,6 +76,7 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
     if (!is_null($mensaje)) { ?>
         <br />
         <div>
+
             <strong>
                 <?= $mensaje['msg'] ?>
             </strong>
