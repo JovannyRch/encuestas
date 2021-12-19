@@ -1,10 +1,14 @@
 <?php include('header.php'); ?>
 <div id="app">
 
-    <div v-show="loading">
+
+
+    <div class="progress" v-if="loading">
+        <div class="determinate" style="width: 70%"></div>
     </div>
     <div v-show="!loading">
 
+        <h3 class="text-center">Reporte administración</h3>
         <div class="row">
             <div class="col s12 m6">
 
@@ -62,11 +66,12 @@
                     <div class="card horizontal">
                         <div class="card-stacked">
                             <div class="card-content">
-                               
+
                                 <p>
                                     {{comentario.comentario}}
                                 </p>
-                                <small> <i>{{`${comentario.nombre} ${comentario.apellido_paterno} ${comentario.apellido_materno}`}}</i></small> 
+                                <small> <i>{{`${comentario.nombre} ${comentario.apellido_paterno}
+                                        ${comentario.apellido_materno}`}}</i></small>
                             </div>
                         </div>
                     </div>

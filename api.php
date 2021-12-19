@@ -27,29 +27,52 @@ switch ($metodo) {
                 $res = $db->array("SELECT * from unidades_aprendizaje");
                 responder($res);
                 break;
-            case 'reporte':{
+            case 'reporte': {
 
-                $totalAlumnos = $db->row('SELECT count(*) total from alumnos')['total'];
-                $totalEncuestas = $db->row('SELECT count(*) total from encuestas')['total'];
+                    $totalAlumnos = $db->row('SELECT count(*) total from alumnos')['total'];
+                    $totalEncuestas = $db->row('SELECT count(*) total from encuestas')['total'];
 
-                $preguntas = $db->array("SELECT * from preguntas");
-                $preguntas_reporte = array();
-                foreach ($preguntas as $pregunta) {
-                    $idPregunta = $pregunta['id_pregunta'];
-                    $promedio = floatval($db->row("SELECT avg(puntaje) promedio from preguntas natural join respuestas where id_pregunta = $idPregunta")['promedio']);
-                    $preguntas_reporte[] = array('pregunta' => $pregunta, 'promedio' => $promedio);
+                    $preguntas = $db->array("SELECT * from preguntas");
+                    $preguntas_reporte = array();
+                    foreach ($preguntas as $pregunta) {
+                        $idPregunta = $pregunta['id_pregunta'];
+                        $promedio = floatval($db->row("SELECT avg(puntaje) promedio from preguntas natural join respuestas where id_pregunta = $idPregunta")['promedio']);
+                        $preguntas_reporte[] = array('pregunta' => $pregunta, 'promedio' => $promedio);
+                    }
+
+                    $comentarios = $db->array("SELECT * from comentarios natural join alumnos");
+                    $reporte = array(
+                        'totalAlumnos' => intval($totalAlumnos),
+                        'totalEncuestas' => intval($totalEncuestas),
+                        'preguntas' => $preguntas_reporte,
+                        'comentarios' => $comentarios
+                    );
+                    responder($reporte);
+                    break;
                 }
+            case 'reporte_unidades': {
+                    $unidades = $db->array("SELECT * from unidades_aprendizaje");
+                    $unidades_reporte = array();
 
-                $comentarios = $db->array("SELECT * from comentarios natural join alumnos");
-                $reporte = array(
-                    'totalAlumnos' => intval($totalAlumnos), 
-                    'totalEncuestas' => intval($totalEncuestas),
-                    'preguntas' => $preguntas_reporte,
-                    'comentarios' => $comentarios
-                );
-                responder($reporte);
-                break;
-            }
+                    $preguntas = $db->array("SELECT * from preguntas");
+
+
+                    foreach ($unidades as $unidad) {
+                        $idUnidad = $unidad['id_unidad_aprendizaje'];
+                        $preguntas_reporte = array();
+
+                        foreach ($preguntas as $pregunta) {
+                            $idPregunta = $pregunta['id_pregunta'];
+                            $promedio = floatval($db->row("SELECT avg(puntaje) promedio from preguntas natural join respuestas where id_pregunta = $idPregunta and id_unidad_aprendizaje = $idUnidad")['promedio']);
+                            $preguntas_reporte[] = array('pregunta' => $pregunta, 'promedio' => $promedio);
+                        }
+
+                        $unidad['preguntas'] = $preguntas_reporte;
+                        $unidades_reporte[] = array('unidad' => $unidad);
+                    }
+                    responder(array('unidades' => $unidades_reporte));
+                    break;
+                }
         }
         break;
     case 'POST':
@@ -58,7 +81,7 @@ switch ($metodo) {
                 $idAlumnno = $datos['idAlumno'];
                 $comentario = $datos['comentario'];
                 $respuestas = $datos['respuestas'];
-                
+
                 $id_encuesta = $db->insert("INSERT INTO encuestas(id_alumno) values($idAlumnno)");
 
                 if (isset($comentario) && $comentario != "") {
