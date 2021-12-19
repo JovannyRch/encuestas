@@ -11,7 +11,7 @@
     <br><br>
         <ul class="collection">
             <li class="collection-item" v-for="unidad in unidades">
-               <h5 class="text-center"> {{unidad.unidad.nombre}}</h5>
+               <h5 class="text-center"> {{unidad.nombre}}</h5>
 
                 <table>
                     <thead>
@@ -19,7 +19,7 @@
                         <th>Promedio</th>
                     </thead>
                     <tbody>
-                        <tr v-for="pregunta in unidad.unidad.preguntas">
+                        <tr v-for="pregunta in unidad.preguntas">
                             <td>
                                 {{pregunta.pregunta.pregunta}}
                             </td>
@@ -60,7 +60,6 @@
                 const {
                     data
                 } = await axios.get('api.php/reporte_unidades');
-                console.log("data", data);
                 this.unidades = data.unidades;
                 console.log(this.unidades);
             },

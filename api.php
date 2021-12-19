@@ -68,7 +68,7 @@ switch ($metodo) {
                         }
 
                         $unidad['preguntas'] = $preguntas_reporte;
-                        $unidades_reporte[] = array('unidad' => $unidad);
+                        $unidades_reporte[] = $unidad;
                     }
                     responder(array('unidades' => $unidades_reporte));
                     break;
@@ -103,6 +103,18 @@ switch ($metodo) {
                     $idAlumnno = $datos['idAlumno'];
                     $respuestas = $db->array("SELECT * from encuestas where id_alumno = $idAlumnno");
                     responder(array("res" => sizeof($respuestas) == 0));
+                    break;
+                }
+            case 'reporte_unidad': {
+                    $idUnidad = $datos['idUnidad'];
+                    $preguntas_reporte = array();
+                    $preguntas = $db->array("SELECT * from preguntas");
+                    foreach ($preguntas as $pregunta) {
+                        $idPregunta = $pregunta['id_pregunta'];
+                        $promedio = floatval($db->row("SELECT avg(puntaje) promedio from preguntas natural join respuestas where id_pregunta = $idPregunta and id_unidad_aprendizaje = $idUnidad")['promedio']);
+                        $preguntas_reporte[] = array('pregunta' => $pregunta, 'promedio' => $promedio);
+                    }
+                    responder(array('preguntas' => $preguntas_reporte));
                     break;
                 }
         }
