@@ -61,11 +61,11 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
         <form class="col s6" action="admin_login.php" method="POST">
             <div class="row">
                 <div class="input-field col s12">
-                    <input placeholder="Ingresa nombre de usuario" value="<?= $data['login'] ?>" id="login" name="login" type="text" class="validate">
+                    <input required placeholder="Ingresa nombre de usuario" value="<?= $data['login'] ?>" id="login" name="login" type="text" class="validate">
                     <label for="boleta">Nombre de usuario</label>
                 </div>
                 <div class="input-field col s12">
-                    <input id="password" value="<?= $data['password'] ?>" placeholder="Ingresa tu contraseña" name="password" type="password" class="validate">
+                    <input required id="password" value="<?= $data['password'] ?>" placeholder="Ingresa tu contraseña" name="password" type="password" class="validate">
                     <label for="password">Contraseña</label>
                 </div>
             </div>

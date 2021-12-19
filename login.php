@@ -61,15 +61,19 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
         <form class="col s6" action="login.php" method="POST">
             <div class="row">
                 <div class="input-field col s12">
-                    <input placeholder="Ingresa tu boleta" value="<?= $data['login'] ?>" id="boleta" name="login" type="text" class="validate">
+                    <input required placeholder="Ingresa tu boleta" value="<?= $data['login'] ?>" id="boleta" name="login" type="text" class="validate">
                     <label for="boleta">Boleta</label>
                 </div>
                 <div class="input-field col s12">
-                    <input id="password" value="<?= $data['password'] ?>" placeholder="Ingresa tu contraseña" name="password" type="password" class="validate">
+                    <input required id="password" value="<?= $data['password'] ?>" placeholder="Ingresa tu contraseña" name="password" type="password" class="validate">
                     <label for="password">Contraseña</label>
                 </div>
             </div>
             <button type="submit" class="btn">Iniciar sesión</button>
+            <br><br>
+            <a href="registro.php">
+                Registrarme
+            </a>
         </form>
     </div>
     <?php

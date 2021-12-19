@@ -16,7 +16,7 @@ $id_usuario = $_SESSION['id_usuario'];
 <?php include('header.php'); ?>
 <nav>
     <div class="nav-wrapper teal">
-        <a href="/administracion.php" class="brand-logo"> Encuestas</a>
+        <a href="administracion.php" class="brand-logo"> Encuestas</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><a href="administracion.php">Inicio</a></li>
             <li><a href="reporte_unidades.php">Reporte unidades de aprendizaje</a></li>
