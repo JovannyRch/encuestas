@@ -1,3 +1,18 @@
+<?php
+
+session_start();
+
+
+if (isset($_SESSION['login'])) {
+    if ($_SESSION['tipo_usuario'] != "ALUMNO") {
+        header("Location: logout.php");
+    }
+}
+
+$id_usuario = $_SESSION['id_usuario'];
+
+?>
+
 <?php include('header.php'); ?>
 
 
@@ -11,7 +26,15 @@
     <div v-if="!isAvailable">
         <br><br><br>
         <b>
-            <h5 class="text-center">Gracias por participar.</h5>
+            <h5 class="text-center">{{`${datosUsuario.nombre} ${datosUsuario.apellido_paterno}
+                ${datosUsuario.apellido_materno}`}}</h5>
+            <h3 class="text-center">Gracias por participar.</h3>
+            <center>
+                <a href="comprobante.php" target="_blank" type="button" name="action">
+                    Descargar comprobante
+                </a>
+            </center>
+
         </b>
     </div>
     <div v-if="!loading && isAvailable">
@@ -69,6 +92,7 @@
     const app = new Vue({
         el: '#app',
         data: {
+            idUsuario: `<?=$id_usuario?>`,
             unidades: [],
             preguntas: [],
             loading: false,
@@ -76,6 +100,7 @@
             respuestas: [],
             isAvailable: null,
             idAlumno: 1, //TODO
+            datosUsuario: null,
         },
         created: function () {
             this.getData();
@@ -83,6 +108,7 @@
         methods: {
             getData: async function () {
                 this.loading = true;
+                this.getDatosUsuario();
                 this.isAvailable = await this.checkIsAvailable();
                 if (this.isAvailable) {
                     await this.getPreguntas();
@@ -109,10 +135,10 @@
                 this.respuestas.push(item);
             },
             guardar: async function () {
-                /*   if (this.respuestas.length !== this.preguntas.length * this.unidades.length) {
-                      alert("Conteste todas la respuestas");
-                      return;
-                  } */
+                if (this.respuestas.length !== this.preguntas.length * this.unidades.length) {
+                    alert("Conteste todas la respuestas");
+                    return;
+                }
                 const idAlumno = this.idAlumno;
                 const data = {
                     idAlumno,
@@ -121,6 +147,7 @@
                 }
                 await axios.post('api.php/encuesta', data);
                 this.isAvailable = false;
+                location.reload();
             },
             obtenerPuntaje: function (pregunta, unidad) {
                 const res = this.respuestas.find((r) => r.idPregunta === pregunta.id_pregunta && r.idUnidad === unidad.id_unidad_aprendizaje);
@@ -128,6 +155,10 @@
                     return "*";
                 }
                 return res.puntaje;
+            },
+            getDatosUsuario: async function () {
+                const { data } = await axios.post('api.php/datos_alumno', { idUsuario: this.idUsuario });
+                this.datosUsuario = data.datos;
             }
         }
     })

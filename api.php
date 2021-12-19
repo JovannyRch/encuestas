@@ -117,6 +117,12 @@ switch ($metodo) {
                     responder(array('preguntas' => $preguntas_reporte));
                     break;
                 }
+            case 'datos_alumno':{
+                $idUsuario = $datos['idUsuario'];
+                $alumno = $db->row("SELECT * from alumnos where id_usuario = $idUsuario");
+                responder(array('datos' => $alumno));
+                break;
+            }
         }
         break;
     case 'PUT':
